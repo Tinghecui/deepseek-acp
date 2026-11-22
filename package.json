@@ -1,16 +1,16 @@
 {
-  "name": "deepseek-acp",
-  "version": "0.11.0",
+  "name": "@james5642432/deepseek-acp",
+  "version": "0.11.0-coteam.1",
   "description": "Editor-facing Agent Client Protocol adapter for DeepSeek Harness",
   "license": "MIT",
   "author": "xintaofei",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xintaofei/deepseek-acp.git"
+    "url": "git+https://github.com/Tinghecui/deepseek-acp.git"
   },
-  "homepage": "https://github.com/xintaofei/deepseek-acp#readme",
+  "homepage": "https://github.com/Tinghecui/deepseek-acp/tree/coteam#readme",
   "bugs": {
-    "url": "https://github.com/xintaofei/deepseek-acp/issues"
+    "url": "https://github.com/Tinghecui/deepseek-acp/issues"
   },
   "keywords": [
     "acp",
@@ -51,7 +51,8 @@
     "prepublishOnly": "npm run build && node scripts/preflight-publish.mjs && npm run typecheck && npm test"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "1.4.0",

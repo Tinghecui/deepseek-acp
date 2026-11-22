@@ -2,6 +2,14 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
+> **This is CoTeam's fork**, published as `@james5642432/deepseek-acp` for use by
+> [codeg](https://github.com/Tinghecui/dodoer-releases). It is upstream
+> [xintaofei/deepseek-acp](https://github.com/xintaofei/deepseek-acp) plus the
+> `DEEPSEEK_ACP_PLUGINS` mount point proposed in
+> [xintaofei/deepseek-acp#17](https://github.com/xintaofei/deepseek-acp/pull/17); the version
+> suffix `-coteam.N` marks the fork revision on top of the upstream version. Use the
+> upstream `deepseek-acp` package unless you need that change.
+
 [![npm version](https://img.shields.io/npm/v/deepseek-acp)](https://www.npmjs.com/package/deepseek-acp)
 [![npm monthly downloads](https://img.shields.io/npm/dm/deepseek-acp)](https://www.npmjs.com/package/deepseek-acp)
 [![CI status](https://github.com/xintaofei/deepseek-acp/actions/workflows/ci.yml/badge.svg)](https://github.com/xintaofei/deepseek-acp/actions/workflows/ci.yml)

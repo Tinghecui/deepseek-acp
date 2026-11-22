@@ -117,7 +117,9 @@ describe('initialize（US-01）', () => {
       readFileSync(fileURLToPath(new URL('../package.json', import.meta.url)), 'utf8'),
     ) as { version: string; name: string }
     expect(AGENT_INFO.version).toBe(pkg.version)
-    expect(AGENT_INFO.name).toBe(pkg.name)
+    // CoTeam 分叉以带 scope 的包名发布，协议里的 agent 名仍是 `deepseek-acp`：
+    // codeg 按它识别这个 agent，换名等于换了一个 agent。
+    expect(AGENT_INFO.name).toBe(pkg.name.replace(/^@[^/]+\//, ''))
   })
 
   it('authenticate 是 no-op，不报错', async () => {

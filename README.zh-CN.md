@@ -2,6 +2,13 @@
 
 [English](README.md) | **简体中文**
 
+> **这是 CoTeam 的分叉版**，以 `@james5642432/deepseek-acp` 发布，供
+> [codeg](https://github.com/Tinghecui/dodoer-releases) 使用。内容是上游
+> [xintaofei/deepseek-acp](https://github.com/xintaofei/deepseek-acp) 加上
+> [xintaofei/deepseek-acp#17](https://github.com/xintaofei/deepseek-acp/pull/17) 提议的
+> `DEEPSEEK_ACP_PLUGINS` 挂载点；版本号后缀 `-coteam.N` 是在上游版本之上的分叉修订号。
+> 不需要这项改动的话，请用上游的 `deepseek-acp` 包。
+
 [![npm 版本](https://img.shields.io/npm/v/deepseek-acp)](https://www.npmjs.com/package/deepseek-acp)
 [![npm 月下载量](https://img.shields.io/npm/dm/deepseek-acp)](https://www.npmjs.com/package/deepseek-acp)
 [![CI 状态](https://github.com/xintaofei/deepseek-acp/actions/workflows/ci.yml/badge.svg)](https://github.com/xintaofei/deepseek-acp/actions/workflows/ci.yml)

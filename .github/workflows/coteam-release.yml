@@ -1,0 +1,78 @@
+name: CoTeam Release
+
+# CoTeam 分叉版的发布：打 `coteam-v<版本>` tag 即发布到 npm。
+#
+#     # 改 package.json / package-lock.json / AGENT_INFO 的版本号，如 0.11.0-coteam.2
+#     git tag coteam-v0.11.0-coteam.2 && git push origin coteam-v0.11.0-coteam.2
+#
+# 与上游的 release.yml 分开放，tag 前缀也不同（上游是 `v*`）：rebase 到上游新版本时
+# 这个文件不会与上游冲突，上游的 tag 也不会触发我们的发布。
+#
+# 认证：有 `NPM_TOKEN` secret 就用它（首次发布时包还不存在，npm 上没法预先登记
+# trusted publisher）；首发之后在 npmjs.com 把本文件登记为 trusted publisher，再删掉
+# 这个 secret，就走 OIDC。**本文件的文件名是 trusted publisher 身份的一部分**，改名要
+# 同步改 npm 上的配置。
+on:
+  push:
+    tags: ['coteam-v*']
+
+permissions:
+  id-token: write # OIDC：trusted publishing 与溯源证明都要
+  contents: write # 建 GitHub Release
+
+jobs:
+  # 门禁与上游 release.yml 相同：Windows 先跑一遍（含编码用例），发布任务在 macOS
+  # 上再跑一遍。理由见那个文件。
+  verify-windows:
+    name: Windows 发布门禁
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm.cmd ci
+      - run: npm.cmd run typecheck
+      - run: npm.cmd run build
+      - run: npm.cmd test
+      - run: npm.cmd run test:encoding
+
+  publish:
+    name: 发布到 npm
+    needs: verify-windows
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm i -g npm@^11.5.1
+      - run: npm ci
+
+      - name: 校验 tag 与 package.json 版本一致
+        run: |
+          tag="${GITHUB_REF_NAME#coteam-v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::tag $GITHUB_REF_NAME 对应 $tag，package.json 是 $pkg"
+            exit 1
+          fi
+
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+
+      # 预发布版本号（带 `-coteam.N`）npm 要求显式 `--tag`。打成 `latest`：codeg 查
+      # 新版本时读的是 dist-tags.latest，这个包也只有分叉版这一条线。
+      # `NODE_AUTH_TOKEN` 为空时 npm 走 OIDC（trusted publishing）。
+      - run: npm publish --tag latest --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: 建 GitHub Release
+        run: gh release create "$GITHUB_REF_NAME" --prerelease --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
